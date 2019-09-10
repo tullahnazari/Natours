@@ -20,12 +20,37 @@ const tours =JSON.parse(
 fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 );
 
-app.get('/apis/v1/tour', (req, res) => {
+app.get('/apis/v1/tours', (req, res) => {
     res.status(200).json({
         status: 'success',
         results: tours.length,
         data: {
             tours: tours
+        }
+    });
+
+});
+    
+//GET by ID
+app.get('/apis/v1/tours/:id', (req, res) => {
+    console.log(req.params);
+    //convert id from string to int
+    const id = req.params.id * 1;
+    //finding the id in the array
+    const tour = tours.find(el => el.id == id);
+    //making sure the id exists in the array
+    if (!tour)
+    {
+        return res.status(404).json({
+            status: 'fail',
+            message: 'Invalid ID'
+        });
+    }
+    
+    res.status(200).json({
+        status: 'success',
+        data: {
+            tour
         }
     });
 
@@ -55,4 +80,4 @@ app.post('/api/v1/tours', (req, res) => {
 const port = 8000;
 app.listen(port, () => {
     console.log(`App runnin bruh ${port}...`);
-}) ;
+});
