@@ -1,16 +1,33 @@
 const fs = require('fs');
 const express = require('express');
+const morgan = require('morgan');
 
 const app = express();
 
 //using middleware (middle of request and response)
 app.use(express.json());
 
+//Morgan middleware
+app.use(morgan('dev'));
+
+//creating our own mw. have to be declared before any apis
+app.use((req, res, next) => {
+    console.log('Hello from the middleware :)');
+    next();
+});
+//another mw
+app.use((req, res, next) => {
+    req.requestTime = new Date().toISOString();
+    next();
+});
+
 const tours =JSON.parse(
 fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 );
 
+//ROUTE HANDLERS
 const getAllTours = (req, res) => {
+    console.log(req.requestTime);
     res.status(200).json({
         status: 'success',
         results: tours.length,
@@ -19,6 +36,7 @@ const getAllTours = (req, res) => {
         }
     });
 };
+
 
 const getTourByID = (req, res) => {
     console.log(req.params);
@@ -111,6 +129,7 @@ const deleteTour = (req, res) => {
 // app.delete('/api/v1/tours/:id', deleteTour);
 
 //////BUT THIS IS BETTER, DRY and Easier to read\\\\\\\\\\\\\\
+//ROUTES
 app
 .route('/api/v1/tours')
 .get(getAllTours)
