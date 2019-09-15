@@ -12,8 +12,8 @@ router
 .post(tourController.createTour);
 
 router
-.route('/:id')
-.get(tourController.getTourByID)
+.route('/:id') 
+.get(tourController.getTour)
 .patch(tourController.updateTour)
 .delete(tourController.deleteTour);
 
