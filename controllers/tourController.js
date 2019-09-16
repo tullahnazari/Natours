@@ -1,5 +1,13 @@
 const Tour = require('./../model/tourModel');
 
+//middleware to filter for a specific queryparam that has a route
+exports.aliasTopTours = (req, res, next) => {
+    req.query.limit = '5';
+    req.query.sort = '-ratingsAverage,price';
+    req.query.fields = 'name,price,ratingsAverage,summary,difficulty';
+    next();
+}
+
 //get all documents in collection
 exports.getAllTours = async (req, res) => {
   try {
@@ -23,7 +31,7 @@ exports.getAllTours = async (req, res) => {
         query = query.sort('-createdAt')
     }
 
-    
+
 
     //4: Pagination 
     const page = req.query.page * 1 || 1;
