@@ -1,17 +1,25 @@
 const Tour = require('./../model/tourModel');
+const APIFeatures = require('./../utils/apiFeatures');
+
+//middleware to filter for a specific queryparam that has a route
+exports.aliasTopTours = (req, res, next) => {
+    req.query.limit = '5';
+    req.query.sort = '-ratingsAverage,price';
+    req.query.fields = 'name,price,ratingsAverage,summary,difficulty';
+    next();
+};
+
 
 //get all documents in collection
 exports.getAllTours = async (req, res) => {
   try {
-    //build query
-    const queryObj = {...req.query};
-    const excludedFields = ['page', 'sort', 'limit', 'fields'];
-    excludedFields.forEach(el => delete queryObj[el]);
-    
-    //query param with 'req.query'
-    const query = Tour.find(queryObj);
     //execute query
-    const tours = await query;
+    const features = new APIFeatures(Tour.find(), req.query)
+        .filter()
+        .sort()
+        .limitFields()
+        .paginate();
+    const tours = await features.query;
 
     //send query
     res.status(200).json({
