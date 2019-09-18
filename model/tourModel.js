@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
+const validator = require('validator');
 
 
 //DB Schema
@@ -8,7 +9,9 @@ const tourSchema = new mongoose.Schema({
         type: String, 
         required: [true, 'A tour must have a name'],
         unique: true,
-        trim: true
+        trim: true,
+        maxlength: [30, 'A tour name must have liess or equal then 40 characters'],
+        minlength: [5, 'A tour name must have liess or equal then 40 characters'],
     },
     slug: String, 
     duration: {
@@ -21,21 +24,38 @@ const tourSchema = new mongoose.Schema({
     },
     difficulty: {
         type: String, 
-        required: [true, 'A tour must have a difficulty']
+        required: [true, 'A tour must have a difficulty'],
+        enum: {
+            values: ['easy', 'medium', 'difficult'],
+            message: 'Difficulty is either easy, medium, or difficult'
+        }
     },
     ratingsAverage: {
         type: Number,
-        default: 4.5
+        default: 4.5,
+        min: [1, 'Rating must be above 1.0'],
+        max: [5, 'Rating must be below 5.0']
     },
     ratingsQuantity: {
         type: Number,
         default: 0
     },
-    price: {
+    retailPrice: {
         type: Number,
         required: [true, 'A tour must have a price']
     },
-    priceDiscount: Number,
+    priceDiscount: {
+        type: Number,
+        //custom validator checking if discount price is greater than price
+        validate: {
+            validator: function(val) {
+                //This only works on POST endpoints, have to add additional logic for PUT
+                return val < this.retailPrice; //250 < 200
+            },
+            message: 'Discount price {VALUE} should be below retail price'
+
+        }
+    },
     summary: {
         type: String,
         trim: true,
