@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: [true, 'Name is required'],
+        required: [true, 'Email is required'],
         lowercase: true,
         unique: true,
         validate: [validator.isEmail, 'Please provide a valid email']
@@ -22,8 +22,8 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: [true, 'Please provide a password'],
-        maxlength: [30, 'Password must have less or equal then 40 characters'],
-        minlength: [8, 'Password must have less or equal then 40 characters']
+        maxlength: [30, 'Password must have less or equal then 30 characters'],
+        minlength: [8, 'Please choose a longer password. Minimum 8 characters long.']
     },
     passwordConfirm: {
         type: String,
