@@ -5,6 +5,12 @@ dotenv.config({path: './config.env'});
 //Everything not related to express doesn't go in app.js (env var, server connection, etc)
 const app = require('./app');
 
+process.on('uncaughtException', err => {
+  console.log(err.name, err.message);
+  console.log('UNCAUGHT EXCEPTION: 🤬. Shutting down!');
+  process.exit(1);
+});
+
 const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.DATABASE_PASSWORD);
 
 mongoose
@@ -27,6 +33,7 @@ process.on('unhandledRejection', err => {
   process.exit(1);
   })
 });
+
 
 
 
