@@ -6,6 +6,9 @@ const router = express.Router();
 //just one endpoint in the route, not traditional api since we can only poost on that
 router.post('/signup', authController.signup);
 
+router.post('/login', authController.login);
+
+
 router
 .route('/')
 .get(userController.getAllUsers)
