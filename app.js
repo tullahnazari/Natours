@@ -7,15 +7,22 @@ const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 
 const app = express();
+//Morgan middleware and enviroment added
+if (process.env.NODE_ENV === 'development') {
+    app.use(morgan('dev'));
+    }
 
 //serving static files MW
 app.use(express.static(`${__dirname}/public`));
 //using middleware (middle of request and response)
 app.use(express.json());
-//Morgan middleware and enviroment added
-if (process.env.NODE_ENV === 'development') {
-app.use(morgan('dev'));
-}
+
+app.use((req, res, next) => {
+    req.requstTime = new Date().toISOString();
+    console.log(req.headers);
+    next();
+});
+
 
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
