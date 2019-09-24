@@ -38,7 +38,8 @@ const userSchema = new mongoose.Schema({
             },
             message: "Passwords don't match. Please retry."
         }
-    }
+    },
+    passwordChangedAt: Date
 });
 //turn password to hash values before returning to user
 userSchema.pre('save', async function(next) {
@@ -57,6 +58,16 @@ userSchema.pre('save', async function(next) {
 //instance method. comparing hash and non hash pw to verify user has correct creds when logging in
 userSchema.methods.correctPassword = async function(candidatePassword, userPassword) {
     return await bcrypt.compare(candidatePassword, userPassword);
+};
+
+userSchema.methods.changedPasswordAfter = function(JWTTimestamp) {
+    if (this.passwordChangedAt) {
+        const changedTimeStamp = parseInt(this.passwordChangedAt.getTime() / 1000, 10);
+        return JWTTimestamp < changedTimeStamp;
+
+    }
+    
+    return false;
 };
 
 //DB Model from Schema. Model VARS are usually with a capital letter
