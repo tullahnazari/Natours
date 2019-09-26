@@ -63,6 +63,14 @@ userSchema.pre('save', async function(next) {
     next();
 });
 
+userSchema.pre('save', function(next) {
+    //if no one changed the password do this
+    if (!this.isModified('password') || this.isNew) return next();
+
+    this.passwordChangedAt = Date.now() - 1000;
+    next();
+});
+
 //instance method. comparing hash and non hash pw to verify user has correct creds when logging in
 userSchema.methods.correctPassword = async function(candidatePassword, userPassword) {
     return await bcrypt.compare(candidatePassword, userPassword);
