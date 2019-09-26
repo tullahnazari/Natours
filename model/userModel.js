@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const crypto = require('crypto');
 //const slugify = require('slugify');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
@@ -44,7 +45,9 @@ const userSchema = new mongoose.Schema({
             message: "Passwords don't match. Please retry."
         }
     },
-    passwordChangedAt: Date
+    passwordChangedAt: Date,
+    passwordResetToken: String,
+    passwordResetExpires: Date
 });
 //turn password to hash values before returning to user
 userSchema.pre('save', async function(next) {
@@ -73,6 +76,22 @@ userSchema.methods.changedPasswordAfter = function(JWTTimestamp) {
     }
     
     return false;
+};
+
+//generating random pw token
+userSchema.methods.createPasswordResetToken = function() {
+    const resetToken = crypto.randomBytes(32).toString('hex');
+
+    this.passwordResetToken = crypto
+        .createHash('sha256')
+        .update(resetToken)
+        .digest('hex');
+
+    console.log({resetToken}, this.passwordResetToken);
+
+    this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+
+    return resetToken;
 };
 
 //DB Model from Schema. Model VARS are usually with a capital letter
