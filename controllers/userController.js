@@ -12,12 +12,12 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
         results: users.length,
         data: {
             users
-        } 
+        }
     });
 });
 
 exports.getUser = (req, res) => {
-    res.status(500).json({
+    res.status(500).json({ 
         status: 'error',
         message: 'This route is not yet implemented'
     });
