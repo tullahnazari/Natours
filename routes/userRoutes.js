@@ -20,7 +20,12 @@ authController.updatePassword);
 router
 .patch('/updateme',
 authController.protect,
-userController.updateMe)
+userController.updateMe);
+
+router
+.delete('/deleteme', 
+authController.protect, 
+userController.deleteMe)
 
 
 router
