@@ -47,7 +47,12 @@ const userSchema = new mongoose.Schema({
     },
     passwordChangedAt: Date,
     passwordResetToken: String,
-    passwordResetExpires: Date
+    passwordResetExpires: Date,
+    active: {
+        type: Boolean,
+        default: true,
+        select: false
+    }
 });
 //turn password to hash values before returning to user
 userSchema.pre('save', async function(next) {
@@ -61,6 +66,13 @@ userSchema.pre('save', async function(next) {
     this.passwordConfirm = undefined;
 
     next();
+});
+//any endpoint that finds, which is every one 
+userSchema.pre(/^find/, function(next) {
+    //this points to the current query, everything that doesnt have an active false 
+    this.find({active: {$ne: false}});
+    next();
+
 });
 
 userSchema.pre('save', function(next) {
