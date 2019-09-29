@@ -41,8 +41,7 @@ const tourSchema = new mongoose.Schema({
         default: 0
     },
     retailPrice: {
-        type: Number,
-        required: [true, 'A tour must have a price']
+        type: Number
     },
     priceDiscount: {
         type: Number,
@@ -80,7 +79,32 @@ const tourSchema = new mongoose.Schema({
     secretTour: {
         type: Boolean,
         default: false
-    }
+    },
+    //How to create embedded documents (non referencing documents)
+    startLocation: {
+        //GeoJSON need type and coordinates
+        type: {
+            type: String,
+            default: 'Point',
+            enum: ['Point']
+        },
+        coordinates: [Number],
+        address: String,
+        description: String
+    },
+    locations: [
+        {
+            type: {
+                type: String,
+                default: 'Point',
+                enum: ['Point']
+            },
+            coordinates: [Number],
+            address: String,
+            description: String,
+            day: Number
+        }
+    ]
 },
  {
     toJSON: { virtuals: true },
