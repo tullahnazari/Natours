@@ -8,6 +8,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
+const hpp = require('hpp');
 
 const app = express();
 
@@ -40,6 +41,18 @@ app.use(mongoSanitize());
 
 //Data Sanitization against XSS
 app.use(xss());
+
+//Prevent Parameter Pollution
+app.use(hpp({
+    whitelist: [
+        'duration',
+        'ratingsAverage',
+        'ratingQuantity',
+        'maxGroupSize',
+        'difficulty',
+        'price'
+    ]
+}));
 
 //Test Middleware
 app.use((req, res, next) => {
