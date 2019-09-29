@@ -108,7 +108,7 @@ const tourSchema = new mongoose.Schema({
     ],
     //Embed guides in to tours
 
-    //Now Referencing, it was embedded before this
+    //Now Referencing(ref: User), it was embedded before this
     guides: [
         {
         type: mongoose.Schema.ObjectId,
@@ -131,6 +131,16 @@ tourSchema.pre('save', function(next) {
     this.slug = slugify(this.name, { lower: true });
     next();
 });
+
+tourSchema.pre(/^find/, function(next) {
+    this.populate({
+        path: 'guides',
+        select: '-__v -passwordChangedAt'
+    });
+
+    next();
+
+})
 
 //embedding guides data into tour model on CREATE ONLY
 // tourSchema.pre('save', async function(next) {
@@ -159,6 +169,7 @@ tourSchema.pre(/^find/, function(next) {
 tourSchema.post(/^find/, function(docs, next) {
     next();
 });
+
 
 
 //DB Model from Schema
