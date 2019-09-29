@@ -27,7 +27,7 @@ const createSendToken = (user, statusCode, res) => {
 
     res.cookie('jwt', token, cookieOptions);
 
-    //remove pw from output
+    //Remove pw from output
     user.password = undefined;
 
     res.status(statusCode).json({
