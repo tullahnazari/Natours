@@ -40,6 +40,18 @@ const reviewSchema = new mongoose.Schema({
             toObject: { virtuals: true }
 });
 
+
+//populating data for tours and users with only selected fields showing
+reviewSchema.pre(/^find/, function(next) {
+    this.populate({
+        path: 'user',
+        select: 'name photo'
+    });
+
+    next();
+
+});
+
 const Review = mongoose.model('Review', reviewSchema);
 
 module.exports = Review;
