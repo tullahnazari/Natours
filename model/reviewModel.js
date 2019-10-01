@@ -1,5 +1,5 @@
 //create review model: review: string, Rating, Createdat, ref to tour, ref to user
-
+//create reviewcontroller and reviewroutes
 const mongoose = require('mongoose');
 const validator = require('validator');
 
@@ -10,7 +10,7 @@ const reviewSchema = new mongoose.Schema({
         required: [true, 'A tour must have a name'],
         unique: true,
         trim: true,
-        maxlength: [250, 'A tour name must have liess or equal then 250 characters'],
+        maxlength: [250, 'A tour name must have less or equal then 250 characters'],
         minlength: [5, 'A tour name must have more than 5 characters']
     },
     rating: {
@@ -24,15 +24,15 @@ const reviewSchema = new mongoose.Schema({
         default: Date.now(),
         select: false
     },
-    user:{
-        type: mongoose.Schema.ObjectId,
-        ref: 'User',
-        required: [true, 'Please log in to review']
-        },
-    tour:{
+    tour: {
         type: mongoose.Schema.ObjectId,
         ref: 'Tour',
         required: [true, 'Please select a tour to Review.']
+        },
+    user: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
+        required: [true, 'Please log in to review.']
         }
     },
         {
