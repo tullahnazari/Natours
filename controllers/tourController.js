@@ -36,6 +36,7 @@ exports.getAllTours = catchAsync(async (req, res, next) => {
 //get one doc from the collection
 exports.getTour = catchAsync(async (req, res, next) => {
 
+    //shows tour guides user details minus passwordChangedAt and the __v field using populate
     const tour = await Tour.findById(req.params.id);
 
     if (!tour) {
