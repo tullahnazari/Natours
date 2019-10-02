@@ -1,7 +1,11 @@
 const express = require('express');
 const reviewController = require('./../controllers/reviewController');
 const authController = require('./../controllers/authController');
-const router = express.Router();
+
+//merge param to post/get data from endpoints such as 
+//POST /tour/123/reviews/3233
+//GET /tour/234/reviews/323
+const router = express.Router( { mergeParams: true });
 
 
 
@@ -9,7 +13,7 @@ const router = express.Router();
 router
 .route('/')
 .get(reviewController.getAllReviews)
-.post(authController.protect, reviewController.createReview);
+.post(authController.protect, authController.restrictTo('user'), reviewController.createReview);
 
 
 
