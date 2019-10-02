@@ -12,19 +12,6 @@ const filterObj = (obj, ...allowedFields) => {
 };
 
 
-exports.getAllUsers = catchAsync(async (req, res, next) => {
-    const users = await User.find();
-
-    //send query
-    res.status(200).json({
-        status: 'success',
-        results: users.length,
-        data: {
-            users
-        }
-    });
-});
-
 exports.updateMe = catchAsync( async (req, res, next) => {
     //1. create error if user POSTS pw data
     if (req.body.password || req.body.passwordConfirm) {
@@ -54,19 +41,16 @@ exports.deleteMe = catchAsync( async (req, res, next) => {
     });
 });
 
-exports.getUser = (req, res) => {
-    res.status(500).json({ 
-        status: 'error',
-        message: 'This route is not yet implemented'
-    });
-};
-
 exports.createUser = (req, res) => {
     res.status(500).json({
         status: 'error',
-        message: 'This route is not yet implemented'
+        message: 'This route is not yet implemented, please use sign up instead'
     });
 };
+
+exports.getUser = factory.getOne(User);
+
+exports.getAllUsers = factory.getAll(User);
 
 exports.updateUser = factory.updateOne(User);
 
