@@ -5,14 +5,7 @@ const reviewRouter = require('./../routes/reviewRoutes');
 
 const router = express.Router();
 
-//Nested route
-// router
-// .route('/:tourId/reviews')
-// .post(
-//     authController.protect,
-//     authController.restrictTo('user'),
-//     reviewController.createReview);
-
+//Nested route, goes to reviewRoutes soon as it is hit for decoupling reasons
 router.use('/:tourId/reviews', reviewRouter);
 
 router
