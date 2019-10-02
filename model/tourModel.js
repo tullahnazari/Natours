@@ -126,7 +126,7 @@ tourSchema.virtual('durationWeeks').get(function(){
     return this.duration / 7;
 });
 
-//virtual populate reference
+//virtual populate reference. keep a reference without straining the db by persisting
 tourSchema.virtual('reviews', {
     ref: 'Review', 
     foreignField: 'tour',
