@@ -7,6 +7,8 @@ const authController = require('./../controllers/authController');
 const router = express.Router();
 
 
+
+
 //just one endpoint in the route, not traditional api since we can only poost on that
 router.post('/signup', authController.signup);
 
@@ -16,27 +18,28 @@ router.post('/forgotpassword', authController.forgotPassword);
 
 router.patch('/resetpassword/:token', authController.resetPassword);
 
+//will do an auth check before accessing the paths below(easy way to protect all routes without adding t oeach call )
+router.use(authController.protect);
+
 router
 .patch('/updatemypassword', 
-authController.protect, 
 authController.updatePassword);
 
 router
 .get('/me', 
-authController.protect, 
 userController.getMe,
 userController.getUser);
 
 router
 .patch('/updateme',
-authController.protect,
 userController.updateMe);
 
 router
-.delete('/deleteme', 
-authController.protect, 
+.delete('/deleteme',  
 userController.deleteMe)
 
+//another middleware to protect all routes
+router.use(authController.restrictTo('admin'));
 
 router
 .route('/')
