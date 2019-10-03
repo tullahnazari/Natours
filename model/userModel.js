@@ -54,19 +54,19 @@ const userSchema = new mongoose.Schema({
         select: false
     }
 });
-//turn password to hash values before returning to user
-userSchema.pre('save', async function(next) {
-    //only run this function if password was actually modified
-    if (!this.isModified('password')) return next();
+// //turn password to hash values before returning to user
+// userSchema.pre('save', async function(next) {
+//     //only run this function if password was actually modified
+//     if (!this.isModified('password')) return next();
 
-    // Hash the password with cost of 12
-    this.password = await bcrypt.hash(this.password, 12);
+//     // Hash the password with cost of 12
+//     this.password = await bcrypt.hash(this.password, 12);
 
-    // Delete confirm password
-    this.passwordConfirm = undefined;
+//     // Delete confirm password
+//     this.passwordConfirm = undefined;
 
-    next();
-});
+//     next();
+// });
 //any endpoint that finds, which is every one 
 userSchema.pre(/^find/, function(next) {
     //this points to the current query, everything that doesnt have an active false 
